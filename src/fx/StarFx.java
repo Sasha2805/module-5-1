@@ -5,11 +5,10 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.Scanner;
 
-public class dddd extends Application {
+public class StarFx extends Application {
     public static final int WIDTH = 600;
     public static final int HEIGHT = 600;
     private int n = 5;
@@ -17,7 +16,7 @@ public class dddd extends Application {
     private int centerStarY;
     private double radius;
 
-    public void dataInput(Scanner in){   //Ввод данных
+    public void dataInput(Scanner in){   //Ввод данных с консоли
         System.out.print("Введите X центра звезды: ");
         this.centerStarX = in.nextInt();
         System.out.print("Введите Y центра звезды: ");
@@ -34,13 +33,13 @@ public class dddd extends Application {
     private void userInterface(Stage stage) {
         Scanner in = new Scanner(System.in);
         dataInput(in);
-        Pane root = new Pane();
+        Pane pane = new Pane();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         drawStarShape(gc);
-        root.getChildren().add(canvas);
+        pane.getChildren().add(canvas);
 
-        Scene scene = new Scene(root, WIDTH, HEIGHT, Color.WHITESMOKE);
+        Scene scene = new Scene(pane, WIDTH, HEIGHT);
         stage.setTitle("Star");
         stage.setScene(scene);
         stage.show();
@@ -48,12 +47,13 @@ public class dddd extends Application {
 
 
     private void drawStarShape(GraphicsContext gc) {
-        double innerRadius = radius/3;
-        double startingAngle = Math.PI / 2;
-        double angleOfRotation = Math.PI / n;
+        double innerRadius = radius / 2.5;      // Внутрений радиус
+        double startingAngle = Math.PI / 2;     // Начальный угол, верхняя точка звезды
+        double angleOfRotation = Math.PI / n;   // Угол поворота
 
         double[] xPoints = new double[2*n];
         double[] yPoints = new double[2*n];
+        // Цикл задает координаты вершинам
         for (int i = 0; i < 2 * n; i++) {
             if (i % 2 == 1){
                 xPoints[i] = centerStarX + innerRadius * Math.cos(startingAngle);
@@ -62,9 +62,9 @@ public class dddd extends Application {
                 xPoints[i] = centerStarX + radius * Math.cos(startingAngle);
                 yPoints[i] = centerStarY - radius * Math.sin(startingAngle);
             }
-            startingAngle += angleOfRotation;
+            startingAngle += angleOfRotation;   // Увеличиваем угол
         }
-        gc.strokePolygon(xPoints, yPoints, xPoints.length);
+        gc.strokePolygon(xPoints, yPoints, xPoints.length); // Рисуем звезду
     }
 
     public static void main(String[] args) {
